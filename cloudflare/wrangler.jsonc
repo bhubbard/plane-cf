@@ -1,0 +1,72 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "plane-cloudflare",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "account_id": "1175740cdf81970b9d1522fe245099de",
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "plane-db",
+      "database_id": "plane-db-id",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "FILES",
+      "bucket_name": "plane-files"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "plane-kv-id"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "LIVE_ROOM",
+        "class_name": "LiveRoomDO"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["LiveRoomDO"]
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "JOBS_QUEUE",
+        "queue": "plane-jobs"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "plane-jobs",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5
+      }
+    ]
+  },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "SERVER_NAME": "Plane Cloudflare Edition",
+    "PLANE_URL": "http://localhost:8787",
+    "API_ORIGIN": "http://localhost:8000",
+    "BUCKET_NAME": "plane-files",
+    "LIVE_ORIGIN": "http://localhost:3100",
+    "USE_DURABLE_OBJECTS_FOR_LIVE": "true"
+  }
+}
